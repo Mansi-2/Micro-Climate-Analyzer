@@ -1,6 +1,8 @@
 import sqlite3
+import os
 
 def get_connection():
+    os.makedirs("data", exist_ok=True)
     return sqlite3.connect("data/climate.db")
 
 def create_table():
