@@ -1,28 +1,18 @@
-import numpy as np
 import pandas as pd
 
-def compute_zscore(df, column):
-    rolling_mean = df[column].rolling(window=5).mean()
-    rolling_std = df[column].rolling(window=5).std()
+def detect_trend_anomalies(df, column="aqi", change_threshold=15):
+    df = df.copy()
 
-    df[f"{column}_z"] = (df[column] - rolling_mean) / rolling_std
-    df[f"{column}_anomaly"] = df[f"{column}_z"].abs() > 2.5
-    return df
+    # Daily change
+    df["aqi_change"] = df[column].diff()
 
+    # Rolling mean (7-day trend)
+    df["rolling_mean"] = df[column].rolling(window=7).mean()
 
-def cusum_detection(df, column, threshold=5):
-    df[column] = pd.to_numeric(df[column], errors="coerce")
-    df = df.dropna(subset=[column])
-    mean = df[column].mean()
-    pos_cusum = [0]
-    neg_cusum = [0]
+    # Deviation from rolling trend
+    df["trend_deviation"] = df[column] - df["rolling_mean"]
 
-    for x in df[column]:
-        pos_cusum.append(max(0, pos_cusum[-1] + x - mean))
-        neg_cusum.append(min(0, neg_cusum[-1] + x - mean))
-
-    df["cusum_positive"] = pos_cusum[1:]
-    df["cusum_negative"] = neg_cusum[1:]
-    df["cusum_anomaly"] = (df["cusum_positive"] > threshold) | (df["cusum_negative"] < -threshold)
+    # Sudden jump detection
+    df["trend_anomaly"] = df["aqi_change"].abs() > change_threshold
 
     return df
