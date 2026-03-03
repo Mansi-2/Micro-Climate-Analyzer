@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 def compute_zscore(df, column):
     rolling_mean = df[column].rolling(window=5).mean()
@@ -10,6 +11,8 @@ def compute_zscore(df, column):
 
 
 def cusum_detection(df, column, threshold=5):
+    df[column] = pd.to_numeric(df[column], errors="coerce")
+    df = df.dropna(subset=[column])
     mean = df[column].mean()
     pos_cusum = [0]
     neg_cusum = [0]
