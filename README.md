@@ -82,4 +82,26 @@ All visualizations are available through a Streamlit dashboard.
 
 ---
 
-## Project Structure
+
+---
+
+## Why This Project Stands Out
+
+Most beginner projects focus on prediction.
+
+This project focuses on statistical environmental behavior analysis using live API ingestion, feature engineering, control chart methods, and time-series exploration.
+
+It demonstrates applied data science beyond basic machine learning tutorials.
+
+---
+
+## Future Improvements
+
+- Multi-city comparison  
+- Trend decomposition using Prophet  
+- Clustering anomaly types  
+- Automated daily scheduled data updates  
+- Advanced anomaly explanation module  
+
+---
+ 
